@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>agentgate</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: an ops console. One summary strip, then breakdowns in a two-column grid that stacks on phones. */
+:root {
+  --bg: #f7f6f4;          /* warm paper grey */
+  --panel: #ffffff;
+  --ink: #1f1e1d;
+  --muted: #6b6762;
+  --line: #e4e1dc;
+  --accent: #3f5fa8;      /* muted network blue */
+  --accent-soft: #e3e9f6;
+  --good: #2f7d4f;
+  --warn: #a8670f;
+  --bad: #b3372f;
+  --bad-soft: #f8e4e1;
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #171716; --panel: #201f1e; --ink: #ecebe8; --muted: #a29d97; --line: #34322f;
+    --accent: #8ea8e6; --accent-soft: #263150; --good: #6cc08f; --warn: #e0a54d; --bad: #ec7f74; --bad-soft: #3a2220;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #171716; --panel: #201f1e; --ink: #ecebe8; --muted: #a29d97; --line: #34322f;
+  --accent: #8ea8e6; --accent-soft: #263150; --good: #6cc08f; --warn: #e0a54d; --bad: #ec7f74; --bad-soft: #3a2220;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font-sans); font-size: 14px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px 48px;
+}
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 20px; }
+header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.brand { display: grid; gap: 2px; }
+.brand h1 { font-family: var(--font-mono); font-weight: 500; font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+.brand h1 span { color: var(--accent); }
+.brand p { margin: 0; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-size: 12px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); }
+.chip.demo { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); background: var(--panel); border: 1px solid var(--line); border-radius: 10px; }
+.kpi { padding: 14px 16px; display: grid; gap: 2px; border-left: 1px solid var(--line); min-width: 0; }
+.kpi:first-child { border-left: 0; }
+.kpi .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.kpi .value { font-family: var(--font-mono); font-size: 22px; font-variant-numeric: tabular-nums; }
+.kpi .sub { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.kpi.alert .value { color: var(--bad); }
+section { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; min-width: 0; display: grid; gap: 12px; align-content: start; }
+section h2 { font-size: 13px; font-weight: 600; margin: 0; text-wrap: balance; }
+section h2 small { font-weight: 400; color: var(--muted); margin-left: 6px; }
+.grid2 { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 20px; }
+.stack { display: grid; gap: 20px; min-width: 0; align-content: start; }
+.chart { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--muted); font-family: var(--font-mono); font-size: 10px; }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .bar { fill: var(--accent); }
+.chart .bar.weekend { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 0.5; }
+.chart .bar:hover { fill: var(--ink); }
+.scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 500; }
+td.num, th.num { text-align: right; font-family: var(--font-mono); font-size: 13px; }
+tr:last-child td { border-bottom: 0; }
+.who { display: grid; }
+.who .node { color: var(--muted); font-size: 12px; font-family: var(--font-mono); }
+.share { display: inline-block; height: 6px; border-radius: 3px; background: var(--accent); vertical-align: middle; margin-right: 6px; }
+.tag { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-radius: 4px; background: var(--bg); border: 1px solid var(--line); }
+.pill { font-size: 12px; padding: 1px 8px; border-radius: 999px; font-weight: 500; }
+.pill.blocked { background: var(--bad-soft); color: var(--bad); }
+.pill.error { background: var(--bg); color: var(--warn); border: 1px solid var(--line); }
+.pill.redacted { background: var(--accent-soft); color: var(--accent); }
+.note { color: var(--muted); margin: 0; max-width: 68ch; }
+.kinds { display: grid; gap: 8px; }
+.kind { display: flex; justify-content: space-between; gap: 12px; padding: 8px 10px; border-radius: 6px; background: var(--bg); }
+.kind b { font-family: var(--font-mono); font-weight: 500; color: var(--bad); }
+.how { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.how div { display: grid; gap: 4px; min-width: 0; }
+.how h3 { margin: 0; font-size: 13px; }
+.how p { margin: 0; color: var(--muted); }
+code { font-family: var(--font-mono); font-size: 12px; background: var(--bg); border: 1px solid var(--line); padding: 1px 5px; border-radius: 4px; word-break: break-all; }
+footer { color: var(--muted); font-size: 12px; display: flex; flex-wrap: wrap; gap: 6px 16px; }
+footer a { color: var(--accent); }
+.empty { color: var(--muted); }
+@media (max-width: 900px) {
+  .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .kpi:nth-child(4) { border-left: 0; }
+  .kpi:nth-child(n+4) { border-top: 1px solid var(--line); }
+  .grid2, .how { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 480px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kpi { border-left: 0; border-top: 1px solid var(--line); }
+  .kpi:nth-child(-n+2) { border-top: 0; }
+  .kpi:nth-child(even) { border-left: 1px solid var(--line); }
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <h1>agent<span>gate</span></h1>
+      <p>Coding-agent usage across the tailnet, by person, tool and model</p>
+    </div>
+    <div class="chips">
+      <span class="chip" id="range">Last 30 days</span>
+      <span class="chip demo" id="demo-chip" hidden>Demo: synthetic traffic replayed through the real gateway</span>
+    </div>
+  </header>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="grid2">
+    <div class="stack">
+      <section>
+        <h2>Spend per day <small>USD, weekends shaded lighter</small></h2>
+        <svg class="chart" id="daily" viewBox="0 0 640 200" role="img" aria-label="Daily spend chart"></svg>
+      </section>
+      <section>
+        <h2>By engineer <small>identity from tailnet WhoIs</small></h2>
+        <div class="scroll"><table id="by-user"></table></div>
+      </section>
+    </div>
+    <div class="stack">
+      <section>
+        <h2>By tool</h2>
+        <div class="scroll"><table id="by-tool"></table></div>
+      </section>
+      <section>
+        <h2>By model</h2>
+        <div class="scroll"><table id="by-model"></table></div>
+      </section>
+      <section>
+        <h2>Secrets kept off the wire</h2>
+        <p class="note" id="secret-note"></p>
+        <div class="kinds" id="kinds"></div>
+      </section>
+    </div>
+  </div>
+
+  <section>
+    <h2>Needs a look <small>blocked requests and upstream errors, newest first</small></h2>
+    <div class="scroll"><table id="events"></table></div>
+  </section>
+
+  <section>
+    <h2>How it works</h2>
+    <div class="how">
+      <div><h3>Point agents at it</h3><p>Set <code>ANTHROPIC_BASE_URL=http://agentgate/anthropic</code> for Claude Code or <code>OPENAI_BASE_URL=http://agentgate/openai/v1</code> for Codex. Nothing else changes for the engineer.</p></div>
+      <div><h3>The tailnet is the login</h3><p>agentgate runs as a tsnet node. Each call is attributed with WhoIs on the caller's Tailscale IP, so there are no per-person API keys to hand out or revoke.</p></div>
+      <div><h3>Guardrails before the model</h3><p>Every request body is scanned for credentials (cloud keys, tokens, private keys) and blocked or redacted before it leaves the network. Responses stream through untouched.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Built by Dilpreet Singh Bansi as a demo for Tailscale's AI Enablement team. Not a Tailscale product.</span>
+    <a href="https://github.com/DilpreetBansi/agentgate">Source on GitHub</a>
+  </footer>
+</div>
+
+<script>window.AGENTGATE_DATA = {"from":"2026-09-18T23:00:00Z","to":"2026-10-19T23:00:00Z","calls":3557,"users":12,"input_tokens":100254620,"output_tokens":3685077,"cost_usd":463.8422927000011,"error_rate":0.014619061006466124,"p50_ms":2546,"p95_ms":17239,"blocked":24,"redacted":0,"unpriced":0,"by_user":[{"key":"leo@example.com","calls":341,"input_tokens":10750615,"output_tokens":352653,"cost_usd":176.7601252500002,"errors":4,"blocked":1},{"key":"maya@example.com","calls":624,"input_tokens":19683594,"output_tokens":641571,"cost_usd":73.6410275,"errors":9,"blocked":3},{"key":"jonah@example.com","calls":548,"input_tokens":17403376,"output_tokens":594624,"cost_usd":69.78845249999995,"errors":10,"blocked":3},{"key":"sam@example.com","calls":362,"input_tokens":10977861,"output_tokens":376847,"cost_usd":41.08026174999999,"errors":8,"blocked":2},{"key":"fatima@example.com","calls":216,"input_tokens":6685897,"output_tokens":232138,"cost_usd":25.5670905,"errors":1,"blocked":0},{"key":"priya@example.com","calls":392,"input_tokens":12752798,"output_tokens":399324,"cost_usd":24.582720999999978,"errors":7,"blocked":5},{"key":"wei@example.com","calls":181,"input_tokens":5610356,"output_tokens":168373,"cost_usd":14.535564499999996,"errors":5,"blocked":2},{"key":"ravi@example.com","calls":97,"input_tokens":2853102,"output_tokens":95809,"cost_usd":12.618206500000001,"errors":1,"blocked":0},{"key":"oren@example.com","calls":251,"input_tokens":4313883,"output_tokens":265868,"cost_usd":9.289605,"errors":3,"blocked":3},{"key":"chloe@example.com","calls":144,"input_tokens":2773868,"output_tokens":146559,"cost_usd":7.609253899999999,"errors":1,"blocked":1},{"key":"ana@example.com","calls":277,"input_tokens":4375213,"output_tokens":285592,"cost_usd":4.252374249999997,"errors":2,"blocked":2},{"key":"ben@example.com","calls":124,"input_tokens":2074057,"output_tokens":125719,"cost_usd":4.117610049999999,"errors":1,"blocked":2}],"by_model":[{"key":"claude-opus-4-1","calls":399,"input_tokens":13203610,"output_tokens":415047,"cost_usd":229.18267499999996,"errors":4,"blocked":1},{"key":"claude-sonnet-4-5","calls":1726,"input_tokens":55333378,"output_tokens":1801986,"cost_usd":193.02992399999982,"errors":26,"blocked":7},{"key":"gpt-5","calls":355,"input_tokens":11759394,"output_tokens":352977,"cost_usd":18.2290125,"errors":7,"blocked":5},{"key":"gpt-4.1","calls":157,"input_tokens":5199354,"output_tokens":150304,"cost_usd":11.601139999999996,"errors":3,"blocked":2},{"key":"claude-haiku-4-5","calls":320,"input_tokens":5111136,"output_tokens":348577,"cost_usd":6.854020999999998,"errors":5,"blocked":3},{"key":"o4-mini","calls":107,"input_tokens":1672574,"output_tokens":105986,"cost_usd":2.306169800000002,"errors":1,"blocked":2},{"key":"gpt-5-mini","calls":369,"input_tokens":5942303,"output_tokens":387660,"cost_usd":2.2608957499999995,"errors":5,"blocked":3},{"key":"gpt-4o-mini","calls":124,"input_tokens":2032871,"output_tokens":122540,"cost_usd":0.3784546500000001,"errors":1,"blocked":1}],"by_tool":[{"key":"claude-code","calls":2077,"input_tokens":61690467,"output_tokens":2182663,"cost_usd":367.6645072500004,"errors":28,"blocked":10},{"key":"cursor","calls":506,"input_tokens":13751729,"output_tokens":523406,"cost_usd":48.689515650000004,"errors":9,"blocked":3},{"key":"codex","calls":793,"input_tokens":19202068,"output_tokens":810635,"cost_usd":32.95270529999999,"errors":10,"blocked":9},{"key":"aider","calls":181,"input_tokens":5610356,"output_tokens":168373,"cost_usd":14.535564499999996,"errors":5,"blocked":2}],"daily":[{"date":"2026-09-19","calls":108,"cost_usd":12.687910599999995,"users":12},{"date":"2026-09-20","calls":19,"cost_usd":1.5172721499999997,"users":11},{"date":"2026-09-21","calls":20,"cost_usd":2.58913245,"users":12},{"date":"2026-09-22","calls":123,"cost_usd":15.473833949999998,"users":12},{"date":"2026-09-23","calls":138,"cost_usd":18.398834800000003,"users":12},{"date":"2026-09-24","calls":143,"cost_usd":19.82463665,"users":12},{"date":"2026-09-25","calls":132,"cost_usd":16.65320995,"users":12},{"date":"2026-09-26","calls":137,"cost_usd":16.4262006,"users":12},{"date":"2026-09-27","calls":22,"cost_usd":1.7567253,"users":11},{"date":"2026-09-28","calls":20,"cost_usd":2.46264205,"users":12},{"date":"2026-09-29","calls":146,"cost_usd":18.759575699999996,"users":12},{"date":"2026-09-30","calls":158,"cost_usd":22.709810349999994,"users":12},{"date":"2026-10-01","calls":141,"cost_usd":17.020025700000005,"users":12},{"date":"2026-10-02","calls":146,"cost_usd":17.603257850000002,"users":12},{"date":"2026-10-03","calls":172,"cost_usd":19.3018402,"users":12},{"date":"2026-10-04","calls":27,"cost_usd":3.4320378999999996,"users":12},{"date":"2026-10-05","calls":22,"cost_usd":2.5279290499999996,"users":12},{"date":"2026-10-06","calls":165,"cost_usd":25.511230100000006,"users":12},{"date":"2026-10-07","calls":157,"cost_usd":24.388932149999984,"users":12},{"date":"2026-10-08","calls":170,"cost_usd":22.03882474999999,"users":12},{"date":"2026-10-09","calls":194,"cost_usd":22.786613900000003,"users":12},{"date":"2026-10-10","calls":179,"cost_usd":29.720334999999984,"users":12},{"date":"2026-10-11","calls":26,"cost_usd":2.702257149999999,"users":12},{"date":"2026-10-12","calls":28,"cost_usd":3.9746028,"users":12},{"date":"2026-10-13","calls":194,"cost_usd":25.301150449999984,"users":12},{"date":"2026-10-14","calls":195,"cost_usd":29.570110100000008,"users":12},{"date":"2026-10-15","calls":185,"cost_usd":23.595719950000003,"users":12},{"date":"2026-10-16","calls":158,"cost_usd":17.57896575,"users":12},{"date":"2026-10-17","calls":204,"cost_usd":24.96963005000002,"users":12},{"date":"2026-10-18","calls":28,"cost_usd":2.5590453,"users":12}],"secret_kinds":[{"key":"tailscale_key","calls":8,"input_tokens":0,"output_tokens":0,"cost_usd":0,"errors":0,"blocked":0},{"key":"aws_access_key","calls":7,"input_tokens":0,"output_tokens":0,"cost_usd":0,"errors":0,"blocked":0},{"key":"github_token","calls":6,"input_tokens":0,"output_tokens":0,"cost_usd":0,"errors":0,"blocked":0},{"key":"openai_key","calls":3,"input_tokens":0,"output_tokens":0,"cost_usd":0,"errors":0,"blocked":0}],"recent_events":[{"time":"2026-10-17T19:31:47Z","user":"sam@example.com","node":"sam-mbp","tool":"cursor","provider":"anthropic","model":"claude-sonnet-4-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":700,"status":529,"blocked":false,"redacted":false,"findings":"[]"},{"time":"2026-10-17T19:02:30Z","user":"oren@example.com","node":"oren-thinkpad","tool":"claude-code","provider":"anthropic","model":"claude-haiku-4-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":2,"status":403,"blocked":true,"redacted":false,"findings":"[{\"kind\":\"tailscale_key\",\"count\":1}]"},{"time":"2026-10-17T17:07:52Z","user":"priya@example.com","node":"priya-mbp","tool":"codex","provider":"openai","model":"gpt-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":700,"status":529,"blocked":false,"redacted":false,"findings":"[]"},{"time":"2026-10-17T15:10:42Z","user":"oren@example.com","node":"oren-thinkpad","tool":"claude-code","provider":"anthropic","model":"claude-haiku-4-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":2,"status":403,"blocked":true,"redacted":false,"findings":"[{\"kind\":\"tailscale_key\",\"count\":1}]"},{"time":"2026-10-17T13:03:15Z","user":"maya@example.com","node":"maya-mbp","tool":"claude-code","provider":"openai","model":"gpt-5-mini","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":700,"status":429,"blocked":false,"redacted":false,"findings":"[]"},{"time":"2026-10-17T12:19:07Z","user":"oren@example.com","node":"oren-thinkpad","tool":"claude-code","provider":"anthropic","model":"claude-haiku-4-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":700,"status":529,"blocked":false,"redacted":false,"findings":"[]"},{"time":"2026-10-16T17:53:08Z","user":"jonah@example.com","node":"jonah-x1","tool":"claude-code","provider":"anthropic","model":"claude-sonnet-4-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":700,"status":429,"blocked":false,"redacted":false,"findings":"[]"},{"time":"2026-10-15T13:05:34Z","user":"jonah@example.com","node":"jonah-x1","tool":"claude-code","provider":"anthropic","model":"claude-sonnet-4-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":2,"status":403,"blocked":true,"redacted":false,"findings":"[{\"kind\":\"github_token\",\"count\":1}]"},{"time":"2026-10-14T16:15:42Z","user":"leo@example.com","node":"leo-linux","tool":"claude-code","provider":"anthropic","model":"claude-opus-4-1","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":700,"status":429,"blocked":false,"redacted":false,"findings":"[]"},{"time":"2026-10-14T13:33:04Z","user":"jonah@example.com","node":"jonah-x1","tool":"claude-code","provider":"anthropic","model":"claude-sonnet-4-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":700,"status":500,"blocked":false,"redacted":false,"findings":"[]"},{"time":"2026-10-14T13:20:16Z","user":"wei@example.com","node":"wei-mbp","tool":"aider","provider":"openai","model":"gpt-4.1","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":700,"status":429,"blocked":false,"redacted":false,"findings":"[]"},{"time":"2026-10-13T20:24:59Z","user":"wei@example.com","node":"wei-mbp","tool":"aider","provider":"openai","model":"gpt-4.1","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":2,"status":403,"blocked":true,"redacted":false,"findings":"[{\"kind\":\"aws_access_key\",\"count\":1}]"},{"time":"2026-10-13T20:00:18Z","user":"jonah@example.com","node":"jonah-x1","tool":"claude-code","provider":"anthropic","model":"claude-sonnet-4-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":2,"status":403,"blocked":true,"redacted":false,"findings":"[{\"kind\":\"openai_key\",\"count\":1}]"},{"time":"2026-10-13T19:24:11Z","user":"priya@example.com","node":"priya-mbp","tool":"codex","provider":"openai","model":"gpt-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":2,"status":403,"blocked":true,"redacted":false,"findings":"[{\"kind\":\"openai_key\",\"count\":1}]"},{"time":"2026-10-13T18:22:42Z","user":"sam@example.com","node":"sam-mbp","tool":"cursor","provider":"anthropic","model":"claude-sonnet-4-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":700,"status":500,"blocked":false,"redacted":false,"findings":"[]"},{"time":"2026-10-13T16:55:52Z","user":"jonah@example.com","node":"jonah-x1","tool":"claude-code","provider":"anthropic","model":"claude-sonnet-4-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":700,"status":529,"blocked":false,"redacted":false,"findings":"[]"},{"time":"2026-10-13T14:14:31Z","user":"ana@example.com","node":"ana-mbp","tool":"codex","provider":"openai","model":"gpt-5-mini","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":700,"status":529,"blocked":false,"redacted":false,"findings":"[]"},{"time":"2026-10-13T13:49:26Z","user":"wei@example.com","node":"wei-mbp","tool":"aider","provider":"anthropic","model":"claude-haiku-4-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":700,"status":529,"blocked":false,"redacted":false,"findings":"[]"},{"time":"2026-10-12T21:25:44Z","user":"jonah@example.com","node":"jonah-x1","tool":"claude-code","provider":"anthropic","model":"claude-sonnet-4-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":700,"status":500,"blocked":false,"redacted":false,"findings":"[]"},{"time":"2026-10-12T12:17:09Z","user":"maya@example.com","node":"maya-mbp","tool":"claude-code","provider":"anthropic","model":"claude-sonnet-4-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":700,"status":529,"blocked":false,"redacted":false,"findings":"[]"},{"time":"2026-10-10T21:17:45Z","user":"sam@example.com","node":"sam-mbp","tool":"cursor","provider":"anthropic","model":"claude-sonnet-4-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":700,"status":529,"blocked":false,"redacted":false,"findings":"[]"},{"time":"2026-10-10T20:47:27Z","user":"leo@example.com","node":"leo-linux","tool":"claude-code","provider":"anthropic","model":"claude-opus-4-1","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":2,"status":403,"blocked":true,"redacted":false,"findings":"[{\"kind\":\"tailscale_key\",\"count\":1}]"},{"time":"2026-10-10T20:29:25Z","user":"maya@example.com","node":"maya-mbp","tool":"claude-code","provider":"anthropic","model":"claude-sonnet-4-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":700,"status":529,"blocked":false,"redacted":false,"findings":"[]"},{"time":"2026-10-10T18:26:14Z","user":"ravi@example.com","node":"ravi-mbp","tool":"claude-code","provider":"anthropic","model":"claude-sonnet-4-5","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":700,"status":429,"blocked":false,"redacted":false,"findings":"[]"},{"time":"2026-10-10T15:42:24Z","user":"chloe@example.com","node":"chloe-mbp","tool":"cursor","provider":"openai","model":"gpt-4o-mini","input_tokens":0,"output_tokens":0,"cost_usd":0,"priced":true,"latency_ms":2,"status":403,"blocked":true,"redacted":false,"findings":"[{\"kind\":\"aws_access_key\",\"count\":1}]"}]};</script>
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const usd = (n) => n >= 100 ? "$" + Math.round(n).toLocaleString("en-US") : "$" + n.toFixed(2);
+  const int = (n) => Math.round(n).toLocaleString("en-US");
+  const tok = (n) => n >= 1e9 ? (n / 1e9).toFixed(2) + "B" : n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e3 ? (n / 1e3).toFixed(1) + "k" : String(n);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const secs = (ms) => (ms / 1000).toFixed(1) + "s";
+
+  function render(s) {
+    const days = Math.max(1, (s.daily || []).length || Math.round((new Date(s.to) - new Date(s.from)) / 864e5));
+    $("range").textContent = "Last " + days + " days";
+    const perUser = s.users ? s.cost_usd / s.users : 0;
+    const kpis = [
+      ["Spend", usd(s.cost_usd), usd(perUser) + " per engineer"],
+      ["Calls", int(s.calls), (s.calls / days).toFixed(0) + " a day"],
+      ["Engineers", int(s.users), (s.by_tool || []).length + " tools in use"],
+      ["Tokens", tok(s.input_tokens + s.output_tokens), tok(s.output_tokens) + " generated"],
+      ["Latency", secs(s.p50_ms), "p95 " + secs(s.p95_ms) + " · " + (s.error_rate * 100).toFixed(1) + "% errors"],
+      ["Secrets stopped", int(s.blocked + s.redacted), s.blocked + " blocked, " + s.redacted + " redacted", s.blocked + s.redacted > 0],
+    ];
+    $("kpis").innerHTML = kpis.map(([l, v, sub, alert]) =>
+      `<div class="kpi${alert ? " alert" : ""}"><span class="label">${l}</span><span class="value">${v}</span><span class="sub">${sub}</span></div>`).join("");
+
+    drawDaily(s.daily || []);
+
+    const maxCost = Math.max(...(s.by_user || []).map((g) => g.cost_usd), 1e-9);
+    $("by-user").innerHTML = `<thead><tr><th>Engineer</th><th class="num">Calls</th><th class="num">Tokens</th><th class="num">Spend</th></tr></thead><tbody>` +
+      (s.by_user || []).map((g) => `<tr><td><div class="who"><span>${esc(g.key)}</span></div></td><td class="num">${int(g.calls)}</td><td class="num">${tok(g.input_tokens + g.output_tokens)}</td><td class="num"><span class="share" style="width:${Math.max(2, 48 * g.cost_usd / maxCost)}px"></span>${usd(g.cost_usd)}</td></tr>`).join("") + "</tbody>";
+
+    const simple = (rows, label) => `<thead><tr><th>${label}</th><th class="num">Calls</th><th class="num">Errors</th><th class="num">Spend</th></tr></thead><tbody>` +
+      rows.map((g) => `<tr><td><span class="tag">${esc(g.key)}</span></td><td class="num">${int(g.calls)}</td><td class="num">${g.errors ? int(g.errors) : "–"}</td><td class="num">${usd(g.cost_usd)}</td></tr>`).join("") + "</tbody>";
+    $("by-tool").innerHTML = simple(s.by_tool || [], "Tool");
+    $("by-model").innerHTML = simple(s.by_model || [], "Model");
+
+    const kinds = s.secret_kinds || [];
+    $("secret-note").textContent = kinds.length
+      ? "Requests that would have sent these credentials to a model provider. In block mode the agent gets a clear error and the engineer removes the secret."
+      : "No credentials seen in this period.";
+    $("kinds").innerHTML = kinds.map((k) => `<div class="kind"><span>${esc(k.key.replace(/_/g, " "))}</span><b>${int(k.calls)}</b></div>`).join("");
+
+    const ev = s.recent_events || [];
+    $("events").innerHTML = ev.length
+      ? `<thead><tr><th>When</th><th>Engineer</th><th>Tool</th><th>Model</th><th>What happened</th></tr></thead><tbody>` +
+        ev.slice(0, 12).map((e) => {
+          let what;
+          if (e.blocked) {
+            const f = JSON.parse(e.findings || "[]").map((x) => x.kind.replace(/_/g, " ")).join(", ");
+            what = `<span class="pill blocked">Blocked</span> ${esc(f)}`;
+          } else if (e.redacted) {
+            what = `<span class="pill redacted">Redacted</span>`;
+          } else {
+            what = `<span class="pill error">HTTP ${e.status}</span> ${e.status === 429 ? "rate limited" : e.status === 529 ? "provider overloaded" : "upstream error"}`;
+          }
+          const t = new Date(e.time);
+          const when = t.toLocaleDateString("en-US", { month: "short", day: "numeric" }) + " " + t.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+          return `<tr><td>${when}</td><td>${esc(e.user)}</td><td><span class="tag">${esc(e.tool)}</span></td><td>${esc(e.model)}</td><td>${what}</td></tr>`;
+        }).join("") + "</tbody>"
+      : `<tbody><tr><td class="empty">Nothing blocked or failing in this period.</td></tr></tbody>`;
+  }
+
+  function drawDaily(days) {
+    const svg = $("daily");
+    if (!days.length) { svg.innerHTML = `<text x="10" y="20">No calls yet. Point an agent at the gateway to see data.</text>`; return; }
+    const W = 640, H = 200, L = 44, R = 8, T = 10, B = 24;
+    const max = Math.max(...days.map((d) => d.cost_usd));
+    const step = niceStep(max / 4);
+    const top = Math.ceil(max / step) * step || 1;
+    const y = (v) => T + (H - T - B) * (1 - v / top);
+    const bw = (W - L - R) / days.length;
+    let out = "";
+    for (let v = 0; v <= top + 1e-9; v += step) {
+      out += `<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 6}" y="${y(v) + 3}" text-anchor="end">$${v >= 1000 ? (v / 1000) + "k" : v}</text>`;
+    }
+    days.forEach((d, i) => {
+      const dt = new Date(d.date + "T12:00:00Z");
+      const wk = dt.getUTCDay() === 0 || dt.getUTCDay() === 6;
+      const x = L + i * bw + bw * 0.15, h = y(0) - y(d.cost_usd);
+      out += `<rect class="bar${wk ? " weekend" : ""}" x="${x.toFixed(1)}" y="${y(d.cost_usd).toFixed(1)}" width="${(bw * 0.7).toFixed(1)}" height="${Math.max(0, h).toFixed(1)}"><title>${d.date}: $${d.cost_usd.toFixed(2)}, ${d.calls} calls, ${d.users} engineers</title></rect>`;
+      if (i % 7 === 0 || (i === days.length - 1 && i % 7 > 3)) {
+        out += `<text x="${(L + i * bw + bw / 2).toFixed(1)}" y="${H - 6}" text-anchor="middle">${dt.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })}</text>`;
+      }
+    });
+    svg.innerHTML = out;
+  }
+
+  function niceStep(raw) {
+    const p = Math.pow(10, Math.floor(Math.log10(raw || 1)));
+    const n = raw / p;
+    return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * p;
+  }
+
+  if (window.AGENTGATE_DATA) {
+    $("demo-chip").hidden = false;
+    render(window.AGENTGATE_DATA);
+  } else {
+    fetch("api/stats?days=30").then((r) => r.json()).then(render).catch((e) => {
+      $("kpis").innerHTML = `<div class="kpi"><span class="label">Error</span><span class="sub">Could not load /api/stats: ${esc(e.message)}</span></div>`;
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

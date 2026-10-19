@@ -1,0 +1,6 @@
+agentgate
+agentgate-demo
+*.db
+*.db-wal
+*.db-shm
+*-state/

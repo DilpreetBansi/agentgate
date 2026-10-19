@@ -1,0 +1,884 @@
+{
+ "from": "2026-09-18T23:00:00Z",
+ "to": "2026-10-19T23:00:00Z",
+ "calls": 3557,
+ "users": 12,
+ "input_tokens": 100254620,
+ "output_tokens": 3685077,
+ "cost_usd": 463.8422927000011,
+ "error_rate": 0.014619061006466124,
+ "p50_ms": 2546,
+ "p95_ms": 17239,
+ "blocked": 24,
+ "redacted": 0,
+ "unpriced": 0,
+ "by_user": [
+  {
+   "key": "leo@example.com",
+   "calls": 341,
+   "input_tokens": 10750615,
+   "output_tokens": 352653,
+   "cost_usd": 176.7601252500002,
+   "errors": 4,
+   "blocked": 1
+  },
+  {
+   "key": "maya@example.com",
+   "calls": 624,
+   "input_tokens": 19683594,
+   "output_tokens": 641571,
+   "cost_usd": 73.6410275,
+   "errors": 9,
+   "blocked": 3
+  },
+  {
+   "key": "jonah@example.com",
+   "calls": 548,
+   "input_tokens": 17403376,
+   "output_tokens": 594624,
+   "cost_usd": 69.78845249999995,
+   "errors": 10,
+   "blocked": 3
+  },
+  {
+   "key": "sam@example.com",
+   "calls": 362,
+   "input_tokens": 10977861,
+   "output_tokens": 376847,
+   "cost_usd": 41.08026174999999,
+   "errors": 8,
+   "blocked": 2
+  },
+  {
+   "key": "fatima@example.com",
+   "calls": 216,
+   "input_tokens": 6685897,
+   "output_tokens": 232138,
+   "cost_usd": 25.5670905,
+   "errors": 1,
+   "blocked": 0
+  },
+  {
+   "key": "priya@example.com",
+   "calls": 392,
+   "input_tokens": 12752798,
+   "output_tokens": 399324,
+   "cost_usd": 24.582720999999978,
+   "errors": 7,
+   "blocked": 5
+  },
+  {
+   "key": "wei@example.com",
+   "calls": 181,
+   "input_tokens": 5610356,
+   "output_tokens": 168373,
+   "cost_usd": 14.535564499999996,
+   "errors": 5,
+   "blocked": 2
+  },
+  {
+   "key": "ravi@example.com",
+   "calls": 97,
+   "input_tokens": 2853102,
+   "output_tokens": 95809,
+   "cost_usd": 12.618206500000001,
+   "errors": 1,
+   "blocked": 0
+  },
+  {
+   "key": "oren@example.com",
+   "calls": 251,
+   "input_tokens": 4313883,
+   "output_tokens": 265868,
+   "cost_usd": 9.289605,
+   "errors": 3,
+   "blocked": 3
+  },
+  {
+   "key": "chloe@example.com",
+   "calls": 144,
+   "input_tokens": 2773868,
+   "output_tokens": 146559,
+   "cost_usd": 7.609253899999999,
+   "errors": 1,
+   "blocked": 1
+  },
+  {
+   "key": "ana@example.com",
+   "calls": 277,
+   "input_tokens": 4375213,
+   "output_tokens": 285592,
+   "cost_usd": 4.252374249999997,
+   "errors": 2,
+   "blocked": 2
+  },
+  {
+   "key": "ben@example.com",
+   "calls": 124,
+   "input_tokens": 2074057,
+   "output_tokens": 125719,
+   "cost_usd": 4.117610049999999,
+   "errors": 1,
+   "blocked": 2
+  }
+ ],
+ "by_model": [
+  {
+   "key": "claude-opus-4-1",
+   "calls": 399,
+   "input_tokens": 13203610,
+   "output_tokens": 415047,
+   "cost_usd": 229.18267499999996,
+   "errors": 4,
+   "blocked": 1
+  },
+  {
+   "key": "claude-sonnet-4-5",
+   "calls": 1726,
+   "input_tokens": 55333378,
+   "output_tokens": 1801986,
+   "cost_usd": 193.02992399999982,
+   "errors": 26,
+   "blocked": 7
+  },
+  {
+   "key": "gpt-5",
+   "calls": 355,
+   "input_tokens": 11759394,
+   "output_tokens": 352977,
+   "cost_usd": 18.2290125,
+   "errors": 7,
+   "blocked": 5
+  },
+  {
+   "key": "gpt-4.1",
+   "calls": 157,
+   "input_tokens": 5199354,
+   "output_tokens": 150304,
+   "cost_usd": 11.601139999999996,
+   "errors": 3,
+   "blocked": 2
+  },
+  {
+   "key": "claude-haiku-4-5",
+   "calls": 320,
+   "input_tokens": 5111136,
+   "output_tokens": 348577,
+   "cost_usd": 6.854020999999998,
+   "errors": 5,
+   "blocked": 3
+  },
+  {
+   "key": "o4-mini",
+   "calls": 107,
+   "input_tokens": 1672574,
+   "output_tokens": 105986,
+   "cost_usd": 2.306169800000002,
+   "errors": 1,
+   "blocked": 2
+  },
+  {
+   "key": "gpt-5-mini",
+   "calls": 369,
+   "input_tokens": 5942303,
+   "output_tokens": 387660,
+   "cost_usd": 2.2608957499999995,
+   "errors": 5,
+   "blocked": 3
+  },
+  {
+   "key": "gpt-4o-mini",
+   "calls": 124,
+   "input_tokens": 2032871,
+   "output_tokens": 122540,
+   "cost_usd": 0.3784546500000001,
+   "errors": 1,
+   "blocked": 1
+  }
+ ],
+ "by_tool": [
+  {
+   "key": "claude-code",
+   "calls": 2077,
+   "input_tokens": 61690467,
+   "output_tokens": 2182663,
+   "cost_usd": 367.6645072500004,
+   "errors": 28,
+   "blocked": 10
+  },
+  {
+   "key": "cursor",
+   "calls": 506,
+   "input_tokens": 13751729,
+   "output_tokens": 523406,
+   "cost_usd": 48.689515650000004,
+   "errors": 9,
+   "blocked": 3
+  },
+  {
+   "key": "codex",
+   "calls": 793,
+   "input_tokens": 19202068,
+   "output_tokens": 810635,
+   "cost_usd": 32.95270529999999,
+   "errors": 10,
+   "blocked": 9
+  },
+  {
+   "key": "aider",
+   "calls": 181,
+   "input_tokens": 5610356,
+   "output_tokens": 168373,
+   "cost_usd": 14.535564499999996,
+   "errors": 5,
+   "blocked": 2
+  }
+ ],
+ "daily": [
+  {
+   "date": "2026-09-19",
+   "calls": 108,
+   "cost_usd": 12.687910599999995,
+   "users": 12
+  },
+  {
+   "date": "2026-09-20",
+   "calls": 19,
+   "cost_usd": 1.5172721499999997,
+   "users": 11
+  },
+  {
+   "date": "2026-09-21",
+   "calls": 20,
+   "cost_usd": 2.58913245,
+   "users": 12
+  },
+  {
+   "date": "2026-09-22",
+   "calls": 123,
+   "cost_usd": 15.473833949999998,
+   "users": 12
+  },
+  {
+   "date": "2026-09-23",
+   "calls": 138,
+   "cost_usd": 18.398834800000003,
+   "users": 12
+  },
+  {
+   "date": "2026-09-24",
+   "calls": 143,
+   "cost_usd": 19.82463665,
+   "users": 12
+  },
+  {
+   "date": "2026-09-25",
+   "calls": 132,
+   "cost_usd": 16.65320995,
+   "users": 12
+  },
+  {
+   "date": "2026-09-26",
+   "calls": 137,
+   "cost_usd": 16.4262006,
+   "users": 12
+  },
+  {
+   "date": "2026-09-27",
+   "calls": 22,
+   "cost_usd": 1.7567253,
+   "users": 11
+  },
+  {
+   "date": "2026-09-28",
+   "calls": 20,
+   "cost_usd": 2.46264205,
+   "users": 12
+  },
+  {
+   "date": "2026-09-29",
+   "calls": 146,
+   "cost_usd": 18.759575699999996,
+   "users": 12
+  },
+  {
+   "date": "2026-09-30",
+   "calls": 158,
+   "cost_usd": 22.709810349999994,
+   "users": 12
+  },
+  {
+   "date": "2026-10-01",
+   "calls": 141,
+   "cost_usd": 17.020025700000005,
+   "users": 12
+  },
+  {
+   "date": "2026-10-02",
+   "calls": 146,
+   "cost_usd": 17.603257850000002,
+   "users": 12
+  },
+  {
+   "date": "2026-10-03",
+   "calls": 172,
+   "cost_usd": 19.3018402,
+   "users": 12
+  },
+  {
+   "date": "2026-10-04",
+   "calls": 27,
+   "cost_usd": 3.4320378999999996,
+   "users": 12
+  },
+  {
+   "date": "2026-10-05",
+   "calls": 22,
+   "cost_usd": 2.5279290499999996,
+   "users": 12
+  },
+  {
+   "date": "2026-10-06",
+   "calls": 165,
+   "cost_usd": 25.511230100000006,
+   "users": 12
+  },
+  {
+   "date": "2026-10-07",
+   "calls": 157,
+   "cost_usd": 24.388932149999984,
+   "users": 12
+  },
+  {
+   "date": "2026-10-08",
+   "calls": 170,
+   "cost_usd": 22.03882474999999,
+   "users": 12
+  },
+  {
+   "date": "2026-10-09",
+   "calls": 194,
+   "cost_usd": 22.786613900000003,
+   "users": 12
+  },
+  {
+   "date": "2026-10-10",
+   "calls": 179,
+   "cost_usd": 29.720334999999984,
+   "users": 12
+  },
+  {
+   "date": "2026-10-11",
+   "calls": 26,
+   "cost_usd": 2.702257149999999,
+   "users": 12
+  },
+  {
+   "date": "2026-10-12",
+   "calls": 28,
+   "cost_usd": 3.9746028,
+   "users": 12
+  },
+  {
+   "date": "2026-10-13",
+   "calls": 194,
+   "cost_usd": 25.301150449999984,
+   "users": 12
+  },
+  {
+   "date": "2026-10-14",
+   "calls": 195,
+   "cost_usd": 29.570110100000008,
+   "users": 12
+  },
+  {
+   "date": "2026-10-15",
+   "calls": 185,
+   "cost_usd": 23.595719950000003,
+   "users": 12
+  },
+  {
+   "date": "2026-10-16",
+   "calls": 158,
+   "cost_usd": 17.57896575,
+   "users": 12
+  },
+  {
+   "date": "2026-10-17",
+   "calls": 204,
+   "cost_usd": 24.96963005000002,
+   "users": 12
+  },
+  {
+   "date": "2026-10-18",
+   "calls": 28,
+   "cost_usd": 2.5590453,
+   "users": 12
+  }
+ ],
+ "secret_kinds": [
+  {
+   "key": "tailscale_key",
+   "calls": 8,
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "errors": 0,
+   "blocked": 0
+  },
+  {
+   "key": "aws_access_key",
+   "calls": 7,
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "errors": 0,
+   "blocked": 0
+  },
+  {
+   "key": "github_token",
+   "calls": 6,
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "errors": 0,
+   "blocked": 0
+  },
+  {
+   "key": "openai_key",
+   "calls": 3,
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "errors": 0,
+   "blocked": 0
+  }
+ ],
+ "recent_events": [
+  {
+   "time": "2026-10-17T19:31:47Z",
+   "user": "sam@example.com",
+   "node": "sam-mbp",
+   "tool": "cursor",
+   "provider": "anthropic",
+   "model": "claude-sonnet-4-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 700,
+   "status": 529,
+   "blocked": false,
+   "redacted": false,
+   "findings": "[]"
+  },
+  {
+   "time": "2026-10-17T19:02:30Z",
+   "user": "oren@example.com",
+   "node": "oren-thinkpad",
+   "tool": "claude-code",
+   "provider": "anthropic",
+   "model": "claude-haiku-4-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 2,
+   "status": 403,
+   "blocked": true,
+   "redacted": false,
+   "findings": "[{\"kind\":\"tailscale_key\",\"count\":1}]"
+  },
+  {
+   "time": "2026-10-17T17:07:52Z",
+   "user": "priya@example.com",
+   "node": "priya-mbp",
+   "tool": "codex",
+   "provider": "openai",
+   "model": "gpt-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 700,
+   "status": 529,
+   "blocked": false,
+   "redacted": false,
+   "findings": "[]"
+  },
+  {
+   "time": "2026-10-17T15:10:42Z",
+   "user": "oren@example.com",
+   "node": "oren-thinkpad",
+   "tool": "claude-code",
+   "provider": "anthropic",
+   "model": "claude-haiku-4-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 2,
+   "status": 403,
+   "blocked": true,
+   "redacted": false,
+   "findings": "[{\"kind\":\"tailscale_key\",\"count\":1}]"
+  },
+  {
+   "time": "2026-10-17T13:03:15Z",
+   "user": "maya@example.com",
+   "node": "maya-mbp",
+   "tool": "claude-code",
+   "provider": "openai",
+   "model": "gpt-5-mini",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 700,
+   "status": 429,
+   "blocked": false,
+   "redacted": false,
+   "findings": "[]"
+  },
+  {
+   "time": "2026-10-17T12:19:07Z",
+   "user": "oren@example.com",
+   "node": "oren-thinkpad",
+   "tool": "claude-code",
+   "provider": "anthropic",
+   "model": "claude-haiku-4-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 700,
+   "status": 529,
+   "blocked": false,
+   "redacted": false,
+   "findings": "[]"
+  },
+  {
+   "time": "2026-10-16T17:53:08Z",
+   "user": "jonah@example.com",
+   "node": "jonah-x1",
+   "tool": "claude-code",
+   "provider": "anthropic",
+   "model": "claude-sonnet-4-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 700,
+   "status": 429,
+   "blocked": false,
+   "redacted": false,
+   "findings": "[]"
+  },
+  {
+   "time": "2026-10-15T13:05:34Z",
+   "user": "jonah@example.com",
+   "node": "jonah-x1",
+   "tool": "claude-code",
+   "provider": "anthropic",
+   "model": "claude-sonnet-4-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 2,
+   "status": 403,
+   "blocked": true,
+   "redacted": false,
+   "findings": "[{\"kind\":\"github_token\",\"count\":1}]"
+  },
+  {
+   "time": "2026-10-14T16:15:42Z",
+   "user": "leo@example.com",
+   "node": "leo-linux",
+   "tool": "claude-code",
+   "provider": "anthropic",
+   "model": "claude-opus-4-1",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 700,
+   "status": 429,
+   "blocked": false,
+   "redacted": false,
+   "findings": "[]"
+  },
+  {
+   "time": "2026-10-14T13:33:04Z",
+   "user": "jonah@example.com",
+   "node": "jonah-x1",
+   "tool": "claude-code",
+   "provider": "anthropic",
+   "model": "claude-sonnet-4-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 700,
+   "status": 500,
+   "blocked": false,
+   "redacted": false,
+   "findings": "[]"
+  },
+  {
+   "time": "2026-10-14T13:20:16Z",
+   "user": "wei@example.com",
+   "node": "wei-mbp",
+   "tool": "aider",
+   "provider": "openai",
+   "model": "gpt-4.1",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 700,
+   "status": 429,
+   "blocked": false,
+   "redacted": false,
+   "findings": "[]"
+  },
+  {
+   "time": "2026-10-13T20:24:59Z",
+   "user": "wei@example.com",
+   "node": "wei-mbp",
+   "tool": "aider",
+   "provider": "openai",
+   "model": "gpt-4.1",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 2,
+   "status": 403,
+   "blocked": true,
+   "redacted": false,
+   "findings": "[{\"kind\":\"aws_access_key\",\"count\":1}]"
+  },
+  {
+   "time": "2026-10-13T20:00:18Z",
+   "user": "jonah@example.com",
+   "node": "jonah-x1",
+   "tool": "claude-code",
+   "provider": "anthropic",
+   "model": "claude-sonnet-4-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 2,
+   "status": 403,
+   "blocked": true,
+   "redacted": false,
+   "findings": "[{\"kind\":\"openai_key\",\"count\":1}]"
+  },
+  {
+   "time": "2026-10-13T19:24:11Z",
+   "user": "priya@example.com",
+   "node": "priya-mbp",
+   "tool": "codex",
+   "provider": "openai",
+   "model": "gpt-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 2,
+   "status": 403,
+   "blocked": true,
+   "redacted": false,
+   "findings": "[{\"kind\":\"openai_key\",\"count\":1}]"
+  },
+  {
+   "time": "2026-10-13T18:22:42Z",
+   "user": "sam@example.com",
+   "node": "sam-mbp",
+   "tool": "cursor",
+   "provider": "anthropic",
+   "model": "claude-sonnet-4-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 700,
+   "status": 500,
+   "blocked": false,
+   "redacted": false,
+   "findings": "[]"
+  },
+  {
+   "time": "2026-10-13T16:55:52Z",
+   "user": "jonah@example.com",
+   "node": "jonah-x1",
+   "tool": "claude-code",
+   "provider": "anthropic",
+   "model": "claude-sonnet-4-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 700,
+   "status": 529,
+   "blocked": false,
+   "redacted": false,
+   "findings": "[]"
+  },
+  {
+   "time": "2026-10-13T14:14:31Z",
+   "user": "ana@example.com",
+   "node": "ana-mbp",
+   "tool": "codex",
+   "provider": "openai",
+   "model": "gpt-5-mini",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 700,
+   "status": 529,
+   "blocked": false,
+   "redacted": false,
+   "findings": "[]"
+  },
+  {
+   "time": "2026-10-13T13:49:26Z",
+   "user": "wei@example.com",
+   "node": "wei-mbp",
+   "tool": "aider",
+   "provider": "anthropic",
+   "model": "claude-haiku-4-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 700,
+   "status": 529,
+   "blocked": false,
+   "redacted": false,
+   "findings": "[]"
+  },
+  {
+   "time": "2026-10-12T21:25:44Z",
+   "user": "jonah@example.com",
+   "node": "jonah-x1",
+   "tool": "claude-code",
+   "provider": "anthropic",
+   "model": "claude-sonnet-4-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 700,
+   "status": 500,
+   "blocked": false,
+   "redacted": false,
+   "findings": "[]"
+  },
+  {
+   "time": "2026-10-12T12:17:09Z",
+   "user": "maya@example.com",
+   "node": "maya-mbp",
+   "tool": "claude-code",
+   "provider": "anthropic",
+   "model": "claude-sonnet-4-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 700,
+   "status": 529,
+   "blocked": false,
+   "redacted": false,
+   "findings": "[]"
+  },
+  {
+   "time": "2026-10-10T21:17:45Z",
+   "user": "sam@example.com",
+   "node": "sam-mbp",
+   "tool": "cursor",
+   "provider": "anthropic",
+   "model": "claude-sonnet-4-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 700,
+   "status": 529,
+   "blocked": false,
+   "redacted": false,
+   "findings": "[]"
+  },
+  {
+   "time": "2026-10-10T20:47:27Z",
+   "user": "leo@example.com",
+   "node": "leo-linux",
+   "tool": "claude-code",
+   "provider": "anthropic",
+   "model": "claude-opus-4-1",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 2,
+   "status": 403,
+   "blocked": true,
+   "redacted": false,
+   "findings": "[{\"kind\":\"tailscale_key\",\"count\":1}]"
+  },
+  {
+   "time": "2026-10-10T20:29:25Z",
+   "user": "maya@example.com",
+   "node": "maya-mbp",
+   "tool": "claude-code",
+   "provider": "anthropic",
+   "model": "claude-sonnet-4-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 700,
+   "status": 529,
+   "blocked": false,
+   "redacted": false,
+   "findings": "[]"
+  },
+  {
+   "time": "2026-10-10T18:26:14Z",
+   "user": "ravi@example.com",
+   "node": "ravi-mbp",
+   "tool": "claude-code",
+   "provider": "anthropic",
+   "model": "claude-sonnet-4-5",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 700,
+   "status": 429,
+   "blocked": false,
+   "redacted": false,
+   "findings": "[]"
+  },
+  {
+   "time": "2026-10-10T15:42:24Z",
+   "user": "chloe@example.com",
+   "node": "chloe-mbp",
+   "tool": "cursor",
+   "provider": "openai",
+   "model": "gpt-4o-mini",
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cost_usd": 0,
+   "priced": true,
+   "latency_ms": 2,
+   "status": 403,
+   "blocked": true,
+   "redacted": false,
+   "findings": "[{\"kind\":\"aws_access_key\",\"count\":1}]"
+  }
+ ]
+}
